@@ -1,3 +1,7 @@
+# Utilities Include:
+# Changing IPv4 Addresses into its binary format
+# Finding the network address from IPv4 ip and network mask
+
 while True:
     try:
         inp=int(input("""
@@ -54,4 +58,5 @@ Welcome to the simple networking operator:
             print("Invalid input (Only put options 1-3)\n")
     
     except Exception as e:
+
         print(f"Error: {e}\n")
