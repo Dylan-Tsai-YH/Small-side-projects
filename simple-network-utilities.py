@@ -7,7 +7,7 @@ while True:
         inp=int(input("""
 Welcome to the simple networking operator:
 1. Convert IPv4 into binary
-2. Find Network Address
+2. Find Network Address and usable host range
 3. Exit
 """).strip())
         
@@ -43,9 +43,20 @@ Welcome to the simple networking operator:
                         print("Invalid input")
                         continue
                     
-                    network = [x&y for (x,y) in zip(ip,netmask)]
-                    print(f"\nNetwork Address: {".".join(map(lambda x:str(x), network))}")
-                    print(f"Binary: {".".join(map(lambda x:bin(x)[2::].zfill(8),network))}")
+                    network = [x & y for (x, y) in zip(ip, netmask)]
+                    net_addr = list(map(str, network))
+                    wildcard = [255 - m for m in netmask]
+                    broadcast = [n | w for (n, w) in zip(network, wildcard)]
+
+                    first_host_ip = network[-1]+1
+                    last_host_ip = broadcast[-1]-1
+                    first_host = ".".join(map(str, network[:-1]+[first_host_ip]))
+                    last_host = ".".join(map(str, broadcast[:-1]+[last_host_ip]))
+                    usable_range = f"{first_host} - {last_host}"
+
+                    print(f"\nNetwork Address: {'.'.join(net_addr)}")
+                    print(f"Binary: {'.'.join(map(lambda x:bin(x)[2:].zfill(8), network))}")
+                    print(f"Usable Network Address: {usable_range}")
                 
                 except Exception as e:
                     print(f"Error: {e}\n")
@@ -58,5 +69,5 @@ Welcome to the simple networking operator:
             print("Invalid input (Only put options 1-3)\n")
     
     except Exception as e:
-
         print(f"Error: {e}\n")
+
